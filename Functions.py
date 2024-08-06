@@ -5,14 +5,14 @@ N = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"]
 O = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 def isFun(conjuntoFun):
-    return all(isinstance(item, tuple) for item in conjuntoFun)
+    return all(isinstance(item, tuple) for item in conjuntoFun) #verifica que todos los objetos sean tuplas
 
-def prodCart(conjunto1, conjunto2):
+def prodCart(conjunto1, conjunto2):#recibe dos conjuntos
     conjunto1Xconjunto2 = []
-    for i in conjunto1:
-        for j in conjunto2:
-            conjunto1Xconjunto2.append((i,j))
-    return conjunto1Xconjunto2
+    for i in conjunto1:#para todos los elementos de conjunto1
+        for j in conjunto2:#recorrer los elementos de conjunto2
+            conjunto1Xconjunto2.append((i,j))#crear una tupla del recorrido anterios
+    return conjunto1Xconjunto2#devuelve unicamente un conjunto
 
 
 #pruebas
