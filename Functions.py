@@ -10,7 +10,7 @@ class FuncionesConjunto:
     interseccion(conjunto1, conjunto2): Retorna la intersección de dos conjuntos.
     diferencia(conjunto1, conjunto2): Retorna la diferencia de dos conjuntos.
     complemento(conjunto): Retorna el complemento de un conjunto respecto al conjunto referencial.
-    is_funcion(conjunto_funcion): Verifica si un conjunto es una función (todos los elementos son tuplas).
+    is_funcion(conjunto_funcion): Verifica si un conjunto es una función (todos los elementos son listas con dominios únicos).
     producto_cartesiano(conjunto1, conjunto2): Retorna el producto cartesiano de dos conjuntos.
     """
     
@@ -76,15 +76,18 @@ class FuncionesConjunto:
 
     def is_funcion(self, conjunto_funcion):
         """
-        Verifica si un conjunto es una función (todos los elementos son tuplas).
+        Verifica si un conjunto es una función (todos los elementos son listas con dominios únicos).
 
         Parámetros:
         conjunto_funcion (list): El conjunto a verificar.
 
         Retorna:
-        bool: True si todos los elementos del conjunto son tuplas, False en caso contrario.
+        bool: True si el conjunto es una función, False en caso contrario.
         """
-        return all(isinstance(item, tuple) for item in conjunto_funcion)
+        if not all(isinstance(item, list) and len(item) == 2 for item in conjunto_funcion):
+            return False
+        dominios = [item[0] for item in conjunto_funcion]
+        return len(dominios) == len(set(dominios))
 
     def producto_cartesiano(self, conjunto1, conjunto2):
         """
@@ -102,3 +105,4 @@ class FuncionesConjunto:
             for j in conjunto2:
                 conjunto1Xconjunto2.append((i, j))
         return conjunto1Xconjunto2
+
