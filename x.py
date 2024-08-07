@@ -47,7 +47,7 @@ class App(tk.Tk):
         frame_op_conjuntos.grid(row=2, column=1, pady=(0, 10),padx=10, sticky="nsew")
         label_op = tk.Label(frame_op_conjuntos, text="Crear conjuntos con operaciones", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_op.grid(row=0, column=1, columnspan=2, pady=(0, 10))
-        self.entry_conjunto_op = ttk.Entry(frame_op_conjuntos, font=("Arial", 12))
+        self.entry_conjunto_op = ttk.Entry(frame_op_conjuntos, font=("Arial", 12), state='readonly')
         self.entry_conjunto_op.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
         button_new2 = ttk.Button(frame_op_conjuntos, text="New", command=self.create_con_btn)
         button_new2.grid(row=1, column=2, padx=(0, 10), pady=20, sticky="e")
@@ -57,7 +57,7 @@ class App(tk.Tk):
         frame_botones.grid(row=3, column=1, pady=(0, 10),padx=10, sticky="nsew")
         buttons_text = ["(", ")", "uni", "int", "dif", "com"]
         for i, text in enumerate(buttons_text):
-            button = ttk.Button(frame_botones, text=text, command=lambda t=text: self.append_to_entry1(t))
+            button = ttk.Button(frame_botones, text=text, command=lambda t=text: self.append_to_entry(t))
             button.grid(row=0, column=i)
         
         #Frames para Tab2
@@ -74,7 +74,10 @@ class App(tk.Tk):
         label_op = tk.Label(frame_cal_con, text="Operar conjuntos", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_op.grid(row=0, column=1, columnspan=2, pady=(0, 10))
 
-        self.entry_cal_con = ttk.Entry(frame_cal_con, font=("Arial", 12))
+        self.entry_con_tab2 = ttk.Entry(frame_crear_conjuntos, font=("Arial", 12))
+        self.entry_con_tab2.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
+
+        self.entry_cal_con = ttk.Entry(frame_cal_con, font=("Arial", 12), state='readonly')
         self.entry_cal_con.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
 
         button_new3 = ttk.Button(frame_cal_con, text="Operar")
@@ -89,7 +92,7 @@ class App(tk.Tk):
         for i, text in enumerate(buttons_text1):
             row = i // 4
             column = i % 4
-            button_cal = ttk.Button(frame_botones2, text=text, command=lambda t=text: self.append_to_entry2(t))
+            button_cal = ttk.Button(frame_botones2, text=text, command=lambda t=text: self.append_to_entry(t))
             button_cal.grid(row=row, column=column, padx=5, pady=5)
         
         #Frame resultado
@@ -116,7 +119,7 @@ class App(tk.Tk):
         # Obtener la letra correspondiente
         letter = self.letters[self.current_letter_index]
         # Crear un nuevo botón
-        new_con_btn = ttk.Button(self.frame_con, text=letter, command=lambda: (self.append_to_entry1(letter), self.append_to_entry2(letter)))
+        new_con_btn = ttk.Button(self.frame_con, text=letter)
         new_con_btn.grid(row=self.current_letter_index + 2, column=0, pady=5, sticky="we")
         # Guardar el botón en la lista
         self.conjunto_buttons.append(new_con_btn)
@@ -126,18 +129,9 @@ class App(tk.Tk):
         new_con_btn_tab2.grid(row=self.current_letter_index + 2, column=0, pady=5, sticky="we")
         # Guardar el botón en la lista de Tab2
         self.conjunto_buttons2.append(new_con_btn_tab2)
-        self.entry_cal_con.delete(0, tk.END)
+        self.entry_conjunto.delete(0, tk.END)
         self.entry_conjunto_op.delete(0, tk.END)
 
-    def append_to_entry1(self, text):
-        current_text = self.entry_conjunto_op.get()
-        self.entry_conjunto_op.delete(0, tk.END)
-        self.entry_conjunto_op.insert(0, current_text + text)
-    
-    def append_to_entry2(self, text):
-        current_text = self.entry_cal_con.get()
-        self.entry_cal_con.delete(0, tk.END)
-        self.entry_cal_con.insert(0, current_text + text)
 
 
 if __name__ == "__main__":
