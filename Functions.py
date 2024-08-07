@@ -1,21 +1,104 @@
-L = [(1,2),(2,4),(3,6),(4,8 ),(5,10)] #funcion x=2x {x∈Z|x<=1&x>=1}
-M = [(1,2),(2,4),(3,6),3]#algo no funcion
+class FuncionesConjunto:
+    """
+    Clase que implementa diversas operaciones con conjuntos y funciones.
 
-N = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"]
-O = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    Atributos:
+    conjunto_referencial (list): El conjunto referencial para las operaciones de complemento.
 
-def isFun(conjuntoFun):
-    return all(isinstance(item, tuple) for item in conjuntoFun) #verifica que todos los objetos sean tuplas
+    Métodos:
+    union(conjunto1, conjunto2): Retorna la unión de dos conjuntos.
+    interseccion(conjunto1, conjunto2): Retorna la intersección de dos conjuntos.
+    diferencia(conjunto1, conjunto2): Retorna la diferencia de dos conjuntos.
+    complemento(conjunto): Retorna el complemento de un conjunto respecto al conjunto referencial.
+    is_funcion(conjunto_funcion): Verifica si un conjunto es una función (todos los elementos son tuplas).
+    producto_cartesiano(conjunto1, conjunto2): Retorna el producto cartesiano de dos conjuntos.
+    """
+    
+    def __init__(self, conjunto_referencial):
+        """
+        Inicializa la clase FuncionesConjunto con un conjunto referencial.
 
-def prodCart(conjunto1, conjunto2):#recibe dos conjuntos
-    conjunto1Xconjunto2 = []
-    for i in conjunto1:#para todos los elementos de conjunto1
-        for j in conjunto2:#recorrer los elementos de conjunto2
-            conjunto1Xconjunto2.append((i,j))#crear una tupla del recorrido anterios
-    return conjunto1Xconjunto2#devuelve unicamente un conjunto
+        Parámetros:
+        conjunto_referencial (list): El conjunto referencial para las operaciones de complemento.
+        """
+        self.conjunto_referencial = conjunto_referencial
 
+    def union(self, conjunto1, conjunto2):
+        """
+        Retorna la unión de dos conjuntos.
 
-#pruebas
-print(isFun(L))
-print(isFun(M))
-print(prodCart(N,O))
+        Parámetros:
+        conjunto1 (list): El primer conjunto.
+        conjunto2 (list): El segundo conjunto.
+
+        Retorna:
+        list: La unión de los dos conjuntos.
+        """
+        return list(set(conjunto1) | set(conjunto2))
+
+    def interseccion(self, conjunto1, conjunto2):
+        """
+        Retorna la intersección de dos conjuntos.
+
+        Parámetros:
+        conjunto1 (list): El primer conjunto.
+        conjunto2 (list): El segundo conjunto.
+
+        Retorna:
+        list: La intersección de los dos conjuntos.
+        """
+        return list(set(conjunto1) & set(conjunto2))
+
+    def diferencia(self, conjunto1, conjunto2):
+        """
+        Retorna la diferencia de dos conjuntos.
+
+        Parámetros:
+        conjunto1 (list): El primer conjunto.
+        conjunto2 (list): El segundo conjunto.
+
+        Retorna:
+        list: La diferencia de los dos conjuntos.
+        """
+        return list(set(conjunto1) - set(conjunto2))
+
+    def complemento(self, conjunto):
+        """
+        Retorna el complemento de un conjunto respecto al conjunto referencial.
+
+        Parámetros:
+        conjunto (list): El conjunto para el cual se calculará el complemento.
+
+        Retorna:
+        list: El complemento del conjunto.
+        """
+        return list(set(self.conjunto_referencial) - set(conjunto))
+
+    def is_funcion(self, conjunto_funcion):
+        """
+        Verifica si un conjunto es una función (todos los elementos son tuplas).
+
+        Parámetros:
+        conjunto_funcion (list): El conjunto a verificar.
+
+        Retorna:
+        bool: True si todos los elementos del conjunto son tuplas, False en caso contrario.
+        """
+        return all(isinstance(item, tuple) for item in conjunto_funcion)
+
+    def producto_cartesiano(self, conjunto1, conjunto2):
+        """
+        Retorna el producto cartesiano de dos conjuntos.
+
+        Parámetros:
+        conjunto1 (list): El primer conjunto.
+        conjunto2 (list): El segundo conjunto.
+
+        Retorna:
+        list: El producto cartesiano de los dos conjuntos.
+        """
+        conjunto1Xconjunto2 = []
+        for i in conjunto1:
+            for j in conjunto2:
+                conjunto1Xconjunto2.append((i, j))
+        return conjunto1Xconjunto2
