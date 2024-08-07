@@ -35,7 +35,7 @@ class App(tk.Tk):
         # Frame para crear nuevos conjuntos
         frame_crear_conjuntos = tk.Frame(tab1, bg="#335b78")
         frame_crear_conjuntos.grid(row=0, column=1, pady=(10, 10), padx=10, sticky="nsew")
-        label_crear = tk.Label(frame_crear_conjuntos, text="Crear conjuntos", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
+        label_crear = tk.Label(frame_crear_conjuntos, text="Pon elementos para crear conjuntos", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_crear.grid(row=0, column=1, columnspan=2, pady=(0, 10))
         self.entry_conjunto = ttk.Entry(frame_crear_conjuntos, font=("Arial", 12))
         self.entry_conjunto.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
@@ -47,10 +47,12 @@ class App(tk.Tk):
         frame_op_conjuntos.grid(row=2, column=1, pady=(0, 10),padx=10, sticky="nsew")
         label_op = tk.Label(frame_op_conjuntos, text="Crear conjuntos con operaciones", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_op.grid(row=0, column=1, columnspan=2, pady=(0, 10))
+        label_instruc = tk.Label(frame_op_conjuntos, text="Asocia con parentesis y deja espacios entre las operaciones: Ej(A uni B) int C", font=("Arial", 12, "bold"), fg="white", bg="#335b78")
+        label_instruc.grid(row=1, column=1, columnspan=2, pady=(10, 10))
         self.entry_conjunto_op = ttk.Entry(frame_op_conjuntos, font=("Arial", 12))
-        self.entry_conjunto_op.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
+        self.entry_conjunto_op.grid(row=2, column=1, padx=(10, 10), pady=20, sticky="we")
         button_new2 = ttk.Button(frame_op_conjuntos, text="New", command=self.create_con_btn)
-        button_new2.grid(row=1, column=2, padx=(0, 10), pady=20, sticky="e")
+        button_new2.grid(row=2, column=2, padx=(0, 10), pady=20, sticky="e")
 
         # Frame para botones operandos tab1
         frame_botones = tk.Frame(tab1, relief="solid", padx=10, pady=10, bg="#335b78")
@@ -73,19 +75,19 @@ class App(tk.Tk):
         frame_cal_con.grid(row=0, column=1, pady=(10, 10), padx=10, sticky="nsew")
         label_op = tk.Label(frame_cal_con, text="Operar conjuntos", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_op.grid(row=0, column=1, columnspan=2, pady=(0, 10))
-
+        label_instruc = tk.Label(frame_cal_con, text="Asocia con parentesis y deja espacios entre las operaciones: Ej(A uni B) int C", font=("Arial", 12, "bold"), fg="white", bg="#335b78")
+        label_instruc.grid(row=1, column=1, columnspan=2, pady=(10, 10))
         self.entry_cal_con = ttk.Entry(frame_cal_con, font=("Arial", 12))
-        self.entry_cal_con.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
-
+        self.entry_cal_con.grid(row=2, column=1, padx=(10, 10), pady=20, sticky="we")
         button_new3 = ttk.Button(frame_cal_con, text="Operar")
-        button_new3.grid(row=1, column=2, padx=(0, 10), pady=20, sticky="e")
+        button_new3.grid(row=2, column=2, padx=(0, 10), pady=20, sticky="e")
 
         # Frame para botones operandos tab2
         frame_botones2 = tk.Frame(tab2, relief="solid", padx=10, pady=10, bg="#335b78")
         frame_botones2.grid(row=3, column=1, pady=(0, 10),padx=10, sticky="nsew")
 
         #Frame de botones de calculadora
-        buttons_text1 = ["(", ")", "uni", "int", "dif", "com", "fun()", "X"]
+        buttons_text1 = ["(", ")", "uni", "int", "dif", "com", "fun", "pro"]
         for i, text in enumerate(buttons_text1):
             row = i // 4
             column = i % 4
@@ -97,7 +99,7 @@ class App(tk.Tk):
         frame_result.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
         label_TitR = tk.Label(frame_result, text="Resultado", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_TitR.grid(row=0,column=2, pady=(0, 10))
-        text_resultado = tk.Text(frame_result, font=("Arial", 12), fg="white", bg="#335b78", wrap="word", height=15, width=30)
+        text_resultado = tk.Text(frame_result, font=("Arial", 12), fg="white", wrap="word", height=8, width=30)
         text_resultado.grid(row=1, column=2, pady=(0, 10), rowspan=2)
         text_resultado.insert(tk.END, "lista de conjuntos")
 
@@ -108,6 +110,7 @@ class App(tk.Tk):
         frame_result.grid_columnconfigure(1, weight=1)
 
     def create_con_btn(self):
+        self.entry_conjunto.delete(0, tk.END)
         # Incrementar el índice de la letra actual
         self.current_letter_index += 1
         # Si nos quedamos sin letras, no hacer nada
@@ -116,13 +119,13 @@ class App(tk.Tk):
         # Obtener la letra correspondiente
         letter = self.letters[self.current_letter_index]
         # Crear un nuevo botón
-        new_con_btn = ttk.Button(self.frame_con, text=letter, command=lambda: (self.append_to_entry1(letter), self.append_to_entry2(letter)))
+        new_con_btn = ttk.Button(self.frame_con, text=letter, command=lambda: self.append_to_entry1(letter))
         new_con_btn.grid(row=self.current_letter_index + 2, column=0, pady=5, sticky="we")
         # Guardar el botón en la lista
         self.conjunto_buttons.append(new_con_btn)
 
         # Crear un nuevo botón en Tab2
-        new_con_btn_tab2 = ttk.Button(self.frame_con2, text=letter)
+        new_con_btn_tab2 = ttk.Button(self.frame_con2, text=letter, command= lambda: self.append_to_entry2(letter) )
         new_con_btn_tab2.grid(row=self.current_letter_index + 2, column=0, pady=5, sticky="we")
         # Guardar el botón en la lista de Tab2
         self.conjunto_buttons2.append(new_con_btn_tab2)
@@ -138,6 +141,7 @@ class App(tk.Tk):
         current_text = self.entry_cal_con.get()
         self.entry_cal_con.delete(0, tk.END)
         self.entry_cal_con.insert(0, current_text + text)
+
 
 
 if __name__ == "__main__":
