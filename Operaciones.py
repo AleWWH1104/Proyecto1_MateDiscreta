@@ -1,6 +1,7 @@
-U = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Conjunto referencial
+U = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11, 12, 13, 14, 15,16]  # Conjunto referencial
 A = [1, 2, 3, 4]
 B = [3, 4, 5, 6]
+C = [11, 12, 13, 14, 15]
 
 # Unión
 def uni(conjunto1, conjunto2):
@@ -19,7 +20,10 @@ def com(conjunto_referencial, conjunto):
     return list(set(conjunto_referencial) - set(conjunto))
 
 # Pruebas de las funciones
+"""
 print("Unión (A o B):", uni(A, B))
 print("Intersección (A y B):", int(A, B))
 print("Diferencia (A - B):", dif(A, B))
 print("Complemento (-A):", com(U, A))
+print(uni((uni(A, B)),C))
+"""
