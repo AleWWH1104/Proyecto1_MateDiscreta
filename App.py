@@ -42,9 +42,10 @@ class App(tk.Tk):
         label_crear = tk.Label(frame_crear_conjuntos, text="Pon elementos para crear conjuntos", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_crear.grid(row=0, column=1, columnspan=2, pady=(0, 10))
         self.entry_conjunto = ttk.Entry(frame_crear_conjuntos, font=("Arial", 12))
-        self.entry_conjunto.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
+        tk.Label(frame_crear_conjuntos, text="Utiliza comas para seprar los elementos: Ej 1,3,(1,2)", font=("Arial", 12, "bold"), fg="white", bg="#335b78").grid(row=1, column=1, columnspan=2, pady=(10, 10))
+        self.entry_conjunto.grid(row=2, column=1, padx=(10, 10), pady=20, sticky="we")
         button_new1 = ttk.Button(frame_crear_conjuntos, text="New", command=self.create_con_manual)
-        button_new1.grid(row=1, column=2, padx=(0, 10), pady=20, sticky="e")
+        button_new1.grid(row=2, column=2, padx=(0, 10), pady=20, sticky="e")
 
         # Frame para crear nuevos conjuntos con operaciones
         frame_op_conjuntos = tk.Frame(tab1, bg="#335b78")
