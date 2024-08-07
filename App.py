@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from Utilerias import *
+from Lisp3 import *
 
 conjuntos = {"U": []}
 
@@ -102,9 +103,9 @@ class App(tk.Tk):
         frame_result.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
         label_TitR = tk.Label(frame_result, text="Resultado", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_TitR.grid(row=0,column=2, pady=(0, 10))
-        text_resultado = tk.Text(frame_result, font=("Arial", 12), fg="white", wrap="word", height=8, width=30)
-        text_resultado.grid(row=1, column=2, pady=(0, 10), rowspan=2)
-        text_resultado.insert(tk.END, "lista de conjuntos")
+        self.text_resultado = tk.Text(frame_result, font=("Arial", 12), fg="white", wrap="word", height=8, width=30, bg="#2c2c2c")
+        self.text_resultado.grid(row=1, column=2, pady=(0, 10), rowspan=2)
+        self.text_resultado.insert(tk.END, "lista de conjuntos")
 
         # Configuración de la grid
         frame_crear_conjuntos.grid_columnconfigure(1, weight=1)
@@ -117,15 +118,23 @@ class App(tk.Tk):
         letter = self.know_letter()
         if letter == None:
             return
-        self.button_new2['state'] = 'normal'
-        self.button_new3['state'] = 'normal'
+        elif letter == "U":
+            self.manager = ConjuntoManager(conjuntos["U"])    
+            entrada = entrada.replace('(', '').replace(')', '').replace(' ', '')
 
-        manager = ConjuntoManager(conjuntos["U"])
-        success, _ = manager.agregar_conjunto(entrada, letter, conjuntos)
+        conjunto = self.manager.convertir_entrada_a_lista(entrada)
+        print(conjunto)
+        success, _ = self.manager.agregar_conjunto(conjunto, letter, conjuntos)
+        
         if success:
             self.create_con_btn(letter)
             self.entry_conjunto.delete(0, tk.END)
+            self.button_new2['state'] = 'normal'
+            self.button_new3['state'] = 'normal'
+            self.manager.referencial = conjuntos["U"]
+            self.calculadora_conjuntos = Conjuntos_Evaluator(conjuntos["U"])
         else:
+            self.current_letter_index -= 1
             messagebox.showerror("Error", _)
         print(conjuntos)
 
@@ -135,20 +144,27 @@ class App(tk.Tk):
         letter = self.know_letter()
         if letter == None:
             return
-        # manager = ConjuntoManager(CONJUNTO_REFERENCIAL)
-        # manager.agregar_conjunto(entrada, letter, conjuntos)
-        self.create_con_btn(letter)
-        self.entry_conjunto_op.delete(0, tk.END)
+        conjunto = self.calculadora_conjuntos.evaluate(entrada, conjuntos)
+        success, _ = self.manager.agregar_conjunto(conjunto, letter, conjuntos)
+        if success:
+            self.create_con_btn(letter)
+            self.entry_conjunto_op.delete(0, tk.END)
+        else:
+            self.current_letter_index -= 1
+            messagebox.showerror("Error", _)
+        print(conjuntos)
 
     def calc_con(self):
-        entrada = self.entry_cal_cono.get()
+        entrada = f"{self.entry_cal_con.get()}"
         letter = self.know_letter()
         if letter == None:
             return
-        # manager = ConjuntoManager(CONJUNTO_REFERENCIAL)
-        # manager.agregar_conjunto(entrada, letter, conjuntos)
-        self.create_con_btn(letter)
-        self.entry_cal_cono.delete(0, tk.END)
+        print(entrada)
+        conjunto = ", ".join(self.calculadora_conjuntos.evaluate(entrada, conjuntos))
+        print(conjunto)
+        self.text_resultado.delete(1.0, tk.END)
+        self.text_resultado.insert(tk.END, conjunto)
+        self.entry_cal_con.delete(0, tk.END)
         
     def create_con_btn(self, letter):
         # Crear un nuevo botón

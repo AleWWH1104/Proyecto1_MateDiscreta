@@ -10,7 +10,7 @@ def lisp(expr, conjuntos):
 
     def aplicar_operacion(op, conjunto1, conjunto2=None):
         if op == "uni":
-            return fun.union(conjunto1, conjunto2)
+            return fun.union2(conjunto1, conjunto2)
         elif op == "int":
             return fun.interseccion(conjunto1, conjunto2)
         elif op == "dif":
@@ -98,7 +98,7 @@ expr3 = "(A dif B)"
 expr4 = "(com A)"
 expr5 = "(fun C)"
 expr6 = "(A pro B)"
-expr7 = "(C pro C)"
+expr7 = "(A uni (A uni C))"
 
 print(lisp(expr1, conjuntos))  # Unión de A y B
 print(lisp(expr2, conjuntos))  # Intersección de A y B

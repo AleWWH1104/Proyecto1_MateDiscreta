@@ -53,12 +53,10 @@ class ConjuntoManager:
         else:
             return lst in self.referencial
 
-    def agregar_conjunto(self, entrada, nombre, conjuntos):
-        if nombre == "U":
-            entrada = entrada.replace('(', '').replace(')', '').replace(' ', '')
-        lista_elementos = self.convertir_entrada_a_lista(entrada)
-        if self.validar_elementos(lista_elementos) or nombre == "U":
-            conjuntos[nombre] = lista_elementos
-            return True, lista_elementos
-        else:
-            return False, "Error: Un elemento no pertenece al conjunto referencial."
+    def agregar_conjunto(self, lista_elementos, nombre, conjuntos):
+            if self.validar_elementos(lista_elementos) or nombre == "U":
+                conjuntos[nombre] = lista_elementos
+                return True, lista_elementos
+            else:
+                return False, "Error: Un elemento no pertenece al conjunto referencial."
+            

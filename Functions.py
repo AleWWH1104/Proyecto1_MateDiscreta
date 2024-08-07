@@ -87,7 +87,7 @@ class FuncionesConjunto:
         if not all(isinstance(item, list) and len(item) == 2 for item in conjunto_funcion):
             return False
         dominios = [item[0] for item in conjunto_funcion]
-        return len(dominios) == len(set(dominios))
+        return [len(dominios) == len(set(dominios))]
 
     def producto_cartesiano(self, conjunto1, conjunto2):
         """
