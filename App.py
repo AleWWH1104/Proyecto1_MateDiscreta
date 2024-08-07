@@ -1,5 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+from Utilerias import *
+
+conjuntos = {"U": []}
 
 class App(tk.Tk):
     def __init__(self):
@@ -39,7 +42,7 @@ class App(tk.Tk):
         label_crear.grid(row=0, column=1, columnspan=2, pady=(0, 10))
         self.entry_conjunto = ttk.Entry(frame_crear_conjuntos, font=("Arial", 12))
         self.entry_conjunto.grid(row=1, column=1, padx=(10, 10), pady=20, sticky="we")
-        button_new1 = ttk.Button(frame_crear_conjuntos, text="New", command=self.create_con_btn)
+        button_new1 = ttk.Button(frame_crear_conjuntos, text="New", command=self.create_con_manual)
         button_new1.grid(row=1, column=2, padx=(0, 10), pady=20, sticky="e")
 
         # Frame para crear nuevos conjuntos con operaciones
@@ -47,12 +50,12 @@ class App(tk.Tk):
         frame_op_conjuntos.grid(row=2, column=1, pady=(0, 10),padx=10, sticky="nsew")
         label_op = tk.Label(frame_op_conjuntos, text="Crear conjuntos con operaciones", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_op.grid(row=0, column=1, columnspan=2, pady=(0, 10))
-        label_instruc = tk.Label(frame_op_conjuntos, text="Asocia con parentesis y deja espacios entre las operaciones: Ej(A uni B) int C", font=("Arial", 12, "bold"), fg="white", bg="#335b78")
+        label_instruc = tk.Label(frame_op_conjuntos, text="Asocia con parentesis y deja espacios entre\nlas operaciones: Ej(A uni B) int C", font=("Arial", 12, "bold"), fg="white", bg="#335b78")
         label_instruc.grid(row=1, column=1, columnspan=2, pady=(10, 10))
         self.entry_conjunto_op = ttk.Entry(frame_op_conjuntos, font=("Arial", 12))
         self.entry_conjunto_op.grid(row=2, column=1, padx=(10, 10), pady=20, sticky="we")
-        button_new2 = ttk.Button(frame_op_conjuntos, text="New", command=self.create_con_btn)
-        button_new2.grid(row=2, column=2, padx=(0, 10), pady=20, sticky="e")
+        self.button_new2 = ttk.Button(frame_op_conjuntos, text="New", command=self.create_con_op, state="disabled")
+        self.button_new2.grid(row=2, column=2, padx=(0, 10), pady=20, sticky="e")
 
         # Frame para botones operandos tab1
         frame_botones = tk.Frame(tab1, relief="solid", padx=10, pady=10, bg="#335b78")
@@ -75,12 +78,12 @@ class App(tk.Tk):
         frame_cal_con.grid(row=0, column=1, pady=(10, 10), padx=10, sticky="nsew")
         label_op = tk.Label(frame_cal_con, text="Operar conjuntos", font=("Arial", 16, "bold"), fg="white", bg="#335b78")
         label_op.grid(row=0, column=1, columnspan=2, pady=(0, 10))
-        label_instruc = tk.Label(frame_cal_con, text="Asocia con parentesis y deja espacios entre las operaciones: Ej(A uni B) int C", font=("Arial", 12, "bold"), fg="white", bg="#335b78")
+        label_instruc = tk.Label(frame_cal_con, text="Asocia con parentesis y deja espacios entre\nlas operaciones: Ej(A uni B) int C", font=("Arial", 12, "bold"), fg="white", bg="#335b78")
         label_instruc.grid(row=1, column=1, columnspan=2, pady=(10, 10))
         self.entry_cal_con = ttk.Entry(frame_cal_con, font=("Arial", 12))
         self.entry_cal_con.grid(row=2, column=1, padx=(10, 10), pady=20, sticky="we")
-        button_new3 = ttk.Button(frame_cal_con, text="Operar")
-        button_new3.grid(row=2, column=2, padx=(0, 10), pady=20, sticky="e")
+        self.button_new3 = ttk.Button(frame_cal_con, text="Operar", state='disabled', command=self.calc_con)
+        self.button_new3.grid(row=2, column=2, padx=(0, 10), pady=20, sticky="e")
 
         # Frame para botones operandos tab2
         frame_botones2 = tk.Frame(tab2, relief="solid", padx=10, pady=10, bg="#335b78")
@@ -109,15 +112,45 @@ class App(tk.Tk):
         frame_cal_con.grid_columnconfigure(1, weight=1)
         frame_result.grid_columnconfigure(1, weight=1)
 
-    def create_con_btn(self):
-        self.entry_conjunto.delete(0, tk.END)
-        # Incrementar el índice de la letra actual
-        self.current_letter_index += 1
-        # Si nos quedamos sin letras, no hacer nada
-        if self.current_letter_index >= len(self.letters):
+    def create_con_manual(self):
+        entrada = self.entry_conjunto.get()
+        letter = self.know_letter()
+        if letter == None:
             return
-        # Obtener la letra correspondiente
-        letter = self.letters[self.current_letter_index]
+        self.button_new2['state'] = 'normal'
+        self.button_new3['state'] = 'normal'
+
+        manager = ConjuntoManager(conjuntos["U"])
+        success, _ = manager.agregar_conjunto(entrada, letter, conjuntos)
+        if success:
+            self.create_con_btn(letter)
+            self.entry_conjunto.delete(0, tk.END)
+        else:
+            messagebox.showerror("Error", _)
+        print(conjuntos)
+
+
+    def create_con_op(self):
+        entrada = self.entry_conjunto_op.get()
+        letter = self.know_letter()
+        if letter == None:
+            return
+        # manager = ConjuntoManager(CONJUNTO_REFERENCIAL)
+        # manager.agregar_conjunto(entrada, letter, conjuntos)
+        self.create_con_btn(letter)
+        self.entry_conjunto_op.delete(0, tk.END)
+
+    def calc_con(self):
+        entrada = self.entry_cal_cono.get()
+        letter = self.know_letter()
+        if letter == None:
+            return
+        # manager = ConjuntoManager(CONJUNTO_REFERENCIAL)
+        # manager.agregar_conjunto(entrada, letter, conjuntos)
+        self.create_con_btn(letter)
+        self.entry_cal_cono.delete(0, tk.END)
+        
+    def create_con_btn(self, letter):
         # Crear un nuevo botón
         new_con_btn = ttk.Button(self.frame_con, text=letter, command=lambda: self.append_to_entry1(letter))
         new_con_btn.grid(row=self.current_letter_index + 2, column=0, pady=5, sticky="we")
@@ -129,8 +162,17 @@ class App(tk.Tk):
         new_con_btn_tab2.grid(row=self.current_letter_index + 2, column=0, pady=5, sticky="we")
         # Guardar el botón en la lista de Tab2
         self.conjunto_buttons2.append(new_con_btn_tab2)
-        self.entry_cal_con.delete(0, tk.END)
-        self.entry_conjunto_op.delete(0, tk.END)
+
+        self.entry_cal_con.delete(0, tk.END)  
+
+    def know_letter(self):
+        # Incrementar el índice de la letra actual
+        self.current_letter_index += 1
+        # Si nos quedamos sin letras, no hacer nada
+        if self.current_letter_index >= len(self.letters):
+            return None
+        # Obtener la letra correspondiente
+        return self.letters[self.current_letter_index]
 
     def append_to_entry1(self, text):
         current_text = self.entry_conjunto_op.get()
@@ -142,8 +184,7 @@ class App(tk.Tk):
         self.entry_cal_con.delete(0, tk.END)
         self.entry_cal_con.insert(0, current_text + text)
 
-
-
+    
 if __name__ == "__main__":
     app = App()
     app.mainloop()
