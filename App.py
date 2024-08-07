@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from Utilerias import *
-from Lisp3 import *
+from Conjuntos_Evaluator import *
 
 conjuntos = {"U": []}
 
