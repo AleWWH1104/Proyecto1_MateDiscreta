@@ -1,4 +1,9 @@
-from Operaciones import *
+from Functions import *
+
+# el u que estaba en el dic
+#conjunto_referencial = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+conjunto_referencial = ['a', 'b', 'c', 'd', 'e']
+fun = FuncionesConjunto(conjunto_referencial)
 
 def lisp(expr, conjuntos):
     def obtener_conjunto(nombre):
@@ -6,19 +11,25 @@ def lisp(expr, conjuntos):
 
     def aplicar_operacion(op, conjunto1, conjunto2=None):
         if op == "uni":
-            return uni(conjunto1, conjunto2)
+            return fun.union(conjunto1, conjunto2)
         elif op == "int":
-            return int(conjunto1, conjunto2)
+            return fun.interseccion(conjunto1, conjunto2)
         elif op == "dif":
-            return dif(conjunto1, conjunto2)
+            return fun.diferencia(conjunto1, conjunto2)
         elif op == "com":
-            return com(conjuntos['U'], conjunto1)
+            return fun.complemento(conjunto1)
+        elif op == "is_funcion":
+            return fun.is_funcion(conjunto1)
+        elif op == "prod_cart":
+            return fun.producto_cartesiano(conjunto1, conjunto2)
 
     def prioridad(op):
-        if op in ["uni", "int", "dif"]:
+        if op in ["uni", "int", "dif", "prod_cart"]:
             return 1
         if op == "com":
             return 0
+        if op == "is_funcion":
+            return -1 
         return -1
 
     def operar(operador, conjunto1, conjunto2=None):
@@ -34,13 +45,16 @@ def lisp(expr, conjuntos):
     for token in tokens:
         if token in conjuntos:
             stack_operandos.append(obtener_conjunto(token))
-        elif token in ["uni", "int", "dif", "com"]:
+        elif token in ["uni", "int", "dif", "com", "is_funcion", "prod_cart", "com"]:
             while (stack_operadores and prioridad(stack_operadores[-1]) >= prioridad(token)):
                 operador = stack_operadores.pop()
-                if operador == "com":
+                if operador in ["is_funcion"]:
                     conjunto = stack_operandos.pop()
                     resultado = operar(operador, conjunto)
                 else:
+                    if len(stack_operandos) < 2:
+                        print(f"Error: se esperaba al menos dos operandos para el operador {operador}, pero no hay suficientes operandos.")
+                        return
                     conjunto2 = stack_operandos.pop()
                     conjunto1 = stack_operandos.pop()
                     resultado = operar(operador, conjunto1, conjunto2)
@@ -51,7 +65,7 @@ def lisp(expr, conjuntos):
         elif token == ")":
             while stack_operadores and stack_operadores[-1] != "(":
                 operador = stack_operadores.pop()
-                if operador == "com":
+                if operador in ["com", "is_funcion"]:
                     conjunto = stack_operandos.pop()
                     resultado = operar(operador, conjunto)
                 else:
@@ -63,7 +77,7 @@ def lisp(expr, conjuntos):
 
     while stack_operadores:
         operador = stack_operadores.pop()
-        if operador == "com":
+        if operador in ["com", "is_funcion"]:
             conjunto = stack_operandos.pop()
             resultado = operar(operador, conjunto)
         else:
@@ -76,35 +90,22 @@ def lisp(expr, conjuntos):
 
 # Ejemplo de uso
 conjuntos = {
-    'U': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-    'A': [1, 2, 3, 4, 7],
-    'B': [3, 4, 5, 6, 8],
-    'C': [7, 8, 9, 10],
-    'D': [11, 12],
-    'E': [13, 14, 15],
-    'F': [16,8]
+    'A': ['a', 'b', 'c'],
+    'B': ['b', 'c', 'd'],
+    'C': [['a', 1], ['b', 2], ['c', 3]]
 }
 
-expresion6 = "((A dif C) int D)"
-resultado6 = lisp(expresion6, conjuntos)
-print("Intersección ((A dif C) int D):", resultado6)
+# Ejemplo de expresiones
+expr1 = "(uni A B)"
+expr2 = "(int A B)"
+expr3 = "(dif A B)"
+expr4 = "(com A)"
+expr5 = "(is_funcion C)"
+expr6 = "(prod_cart A B)"
 
-expresion7 = "((A uni B) dif (C int E))"
-resultado7 = lisp(expresion7, conjuntos)
-print("Unión y Diferencia combinadas ((A uni B) dif (C int E)):", resultado7)
-
-expresion8 = "(com(A) dif B)"
-resultado8 = lisp(expresion8, conjuntos)
-print("Diferencia y Complemento combinados (com(A) dif B):", resultado8)
-
-expresion9 = "((A int C) uni (B dif D))"
-resultado9 = lisp(expresion9, conjuntos)
-print("Intersección y Unión combinadas ((A int C) uni (B dif D)):", resultado9)
-
-expresion10 = "((A uni (B int C)) dif (D uni E))"
-resultado10 = lisp(expresion10, conjuntos)
-print("Operaciones Anidadas Complejas ((A uni (B int C)) dif (D uni E)):", resultado10)
-
-
-
-
+print(lisp(expr1, conjuntos))  # Unión de A y B
+print(lisp(expr2, conjuntos))  # Intersección de A y B
+print(lisp(expr3, conjuntos))  # Diferencia de A y B
+print(lisp(expr4, conjuntos))  # Complemento de A
+print(lisp(expr5, conjuntos))  # Verifica si C es una función
+print(lisp(expr6, conjuntos))  # Producto cartesiano de A y B
