@@ -1,7 +1,6 @@
 from Functions import *
 
-# el u que estaba en el dic
-#conjunto_referencial = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+# el conjunto_referencial
 conjunto_referencial = ['a', 'b', 'c', 'd', 'e']
 fun = FuncionesConjunto(conjunto_referencial)
 
@@ -27,15 +26,15 @@ def lisp(expr, conjuntos):
         if op in ["uni", "int", "dif", "pro"]:
             return 1
         if op == "com":
-            return 0
+            return 2
         if op == "fun":
-            return 0
+            return 2
         return -1
 
     def operar(operador, conjunto1, conjunto2=None):
         return aplicar_operacion(operador, conjunto1, conjunto2)
 
-    # Tokenizar la cosa
+    # Tokenizar la expresión
     tokens = expr.replace("(", " ( ").replace(")", " ) ").split()
     
     # Stacks
@@ -45,16 +44,13 @@ def lisp(expr, conjuntos):
     for token in tokens:
         if token in conjuntos:
             stack_operandos.append(obtener_conjunto(token))
-        elif token in ["uni", "int", "dif", "com", "fun", "pro", "com"]:
+        elif token in ["uni", "int", "dif", "com", "fun", "pro"]:
             while (stack_operadores and prioridad(stack_operadores[-1]) >= prioridad(token)):
                 operador = stack_operadores.pop()
-                if operador in ["fun"]:
+                if operador in ["com", "fun"]:
                     conjunto = stack_operandos.pop()
                     resultado = operar(operador, conjunto)
                 else:
-                    if len(stack_operandos) < 2:
-                        print(f"Error: se esperaba al menos dos operandos para el operador {operador}, pero no hay suficientes operandos.")
-                        return
                     conjunto2 = stack_operandos.pop()
                     conjunto1 = stack_operandos.pop()
                     resultado = operar(operador, conjunto1, conjunto2)
@@ -96,12 +92,13 @@ conjuntos = {
 }
 
 # Ejemplo de expresiones
-expr1 = "(uni A B)"
-expr2 = "(int A B)"
-expr3 = "(dif A B)"
+expr1 = "(A uni B)"
+expr2 = "(A int B)"
+expr3 = "(A dif B)"
 expr4 = "(com A)"
 expr5 = "(fun C)"
-expr6 = "(pro A B)"
+expr6 = "(A pro B)"
+expr7 = "(C pro C)"
 
 print(lisp(expr1, conjuntos))  # Unión de A y B
 print(lisp(expr2, conjuntos))  # Intersección de A y B
@@ -109,3 +106,4 @@ print(lisp(expr3, conjuntos))  # Diferencia de A y B
 print(lisp(expr4, conjuntos))  # Complemento de A
 print(lisp(expr5, conjuntos))  # Verifica si C es una función
 print(lisp(expr6, conjuntos))  # Producto cartesiano de A y B
+print(lisp(expr7, conjuntos))  # Producto cartesiano de A y B
