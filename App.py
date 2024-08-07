@@ -158,10 +158,11 @@ class App(tk.Tk):
     def calc_con(self):
         entrada = f"{self.entry_cal_con.get()}"
         letter = self.know_letter()
+        self.current_letter_index -= 1
         if letter == None:
             return
         print(entrada)
-        conjunto = ", ".join(self.calculadora_conjuntos.evaluate(entrada, conjuntos))
+        conjunto = self.calculadora_conjuntos.evaluate(entrada, conjuntos)
         print(conjunto)
         self.text_resultado.delete(1.0, tk.END)
         self.text_resultado.insert(tk.END, conjunto)
