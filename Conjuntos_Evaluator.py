@@ -35,12 +35,15 @@ class Conjuntos_Evaluator:
             elif op == "tra":
                 return self.fun.tra(conjunto1, conjunto2)
             elif op == "bin":
-                return self.fun.bin(conjunto1, conjunto2, conjunto3) #relacion es conjunto 1, conjunto2, conjunto3
+                print("conjunto 1: ", conjunto1)
+                print("conjunto 2: ", conjunto2)
+                print("conjunto 3: ", conjunto3)
+                return self.fun.bin(conjunto3, conjunto2, conjunto1) #relacion es conjunto 1, conjunto2, conjunto3
 
         def prioridad(op):
-            if op in ["uni", "int", "dif", "pro", "comp", "pot", "bin"]:
+            if op in ["uni", "int", "dif", "pro", "comp", "pot"]:
                 return 1
-            if op in ["com", "fun", "ref", "sim", "tra"]:
+            if op in ["com", "fun", "ref", "sim", "tra", "bin"]:
                 return 2
             return -1
 
@@ -48,26 +51,32 @@ class Conjuntos_Evaluator:
             return aplicar_operacion(operador, conjunto1, conjunto2, conjunto3)
 
         # Tokenizar la expresión
-        tokens = expresion.replace("(", " ( ").replace(")", " ) ").split()
+        tokens = expresion.replace("(", " ( ").replace(")", " ) ").replace(",", " ").split()
         
         # Stacks
         stack_operadores = []
         stack_operandos = []
 
+        print("tokens antes de for ln57", tokens)
         for token in tokens:
+            print("Token cuando se crea ln58", token)
             if token in self.conjuntos:
                 stack_operandos.append(obtener_conjunto(token))
-            elif token in ["uni", "int", "dif", "com", "fun", "pro", "comp", "pot", "ref", "sim", "tra", "bin"]:
+                print("p creado stack operandos ln62", stack_operandos)
+            elif token.isnumeric():
+                stack_operandos.append(token)
+            elif token in ["uni", "int", "dif", "com", "fun", "pro", "ref", "sim", "tra", "bin"]:
+                print("p creado stack operandos ln65", stack_operandos)
+
                 while (stack_operadores and prioridad(stack_operadores[-1]) >= prioridad(token)):
                     operador = stack_operadores.pop()
                     if operador in ["com", "fun", "ref", "sim", "tra"]:
                         conjunto = stack_operandos.pop()
                         resultado = operar(operador, conjunto)
-                    elif operador in ["pot"]:
-                        exponente = stack_operandos.pop()
-                        conjunto = stack_operandos.pop()
-                        resultado = operar(operador, conjunto, exponente)
+                        print("op con lista com fun ref sim tra linea 69", stack_operandos)
+                        print("Token ln 70", token)
                     elif operador in ["bin"]:
+                        print("bin operador linea 75 ", stack_operandos)
                         conjunto2 = stack_operandos.pop()
                         conjunto1 = stack_operandos.pop()
                         conjunto3 = stack_operandos.pop() if stack_operandos else None
@@ -84,17 +93,18 @@ class Conjuntos_Evaluator:
                 while stack_operadores and stack_operadores[-1] != "(":
                     operador = stack_operadores.pop()
                     if operador in ["com", "fun", "ref", "sim", "tra"]:
+                        print("segundo op de fun linea 92", stack_operandos)
                         conjunto = stack_operandos.pop()
                         resultado = operar(operador, conjunto)
-                    elif operador == "pot":
-                        exponente = stack_operandos.pop()
-                        conjunto = stack_operandos.pop()
-                        resultado = operar(operador, conjunto, exponente)
+
                     elif operador == "bin":
+                        print("bin operador linea 101", stack_operandos)
+                        print("antes de pop en bin", stack_operandos)
                         conjunto2 = stack_operandos.pop()
                         conjunto1 = stack_operandos.pop()
                         conjunto3 = stack_operandos.pop() if stack_operandos else None
                         resultado = operar(operador, conjunto1, conjunto2, conjunto3)
+                        print("despues de pop en bin", stack_operandos)
                     else:
                         conjunto2 = stack_operandos.pop()
                         conjunto1 = stack_operandos.pop()
@@ -103,15 +113,19 @@ class Conjuntos_Evaluator:
                 stack_operadores.pop()  # Quitar '('
 
         while stack_operadores:
+            print(stack_operandos)
             operador = stack_operadores.pop()
-            if operador in ["com", "fun", "ref", "sim", "tra"]:
+            if operador in ["com", "fun"]:
                 conjunto = stack_operandos.pop()
                 resultado = operar(operador, conjunto)
-            elif operador == "pot":
+                print("result de fun linea 121")
+            elif operador in ["ref", "sim", "tra"]:
                 exponente = stack_operandos.pop()
                 conjunto = stack_operandos.pop()
                 resultado = operar(operador, conjunto, exponente)
             elif operador == "bin":
+                print("bin")
+                
                 conjunto2 = stack_operandos.pop()
                 conjunto1 = stack_operandos.pop()
                 conjunto3 = stack_operandos.pop() if stack_operandos else None
