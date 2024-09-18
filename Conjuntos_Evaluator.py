@@ -64,7 +64,7 @@ class Conjuntos_Evaluator:
                 print("p creado stack operandos ln62", stack_operandos)
             elif token.isnumeric():
                 stack_operandos.append(token)
-            elif token in ["uni", "int", "dif", "com", "fun", "pro", "ref", "sim", "tra", "bin", "pot"]:
+            elif token in ["uni", "int", "dif", "com", "fun", "pro", "ref", "sim", "tra", "bin", "pot", "cps"]:
                 print("p creado stack operandos ln65", stack_operandos)
 
                 while (stack_operadores and prioridad(stack_operadores[-1]) >= prioridad(token)):
