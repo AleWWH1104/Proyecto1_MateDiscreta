@@ -24,7 +24,7 @@ class Conjuntos_Evaluator:
                 return self.fun.is_funcion(conjunto1)
             elif op == "pro":
                 return self.fun.producto_cartesiano(conjunto1, conjunto2)
-            elif op == "comp":
+            elif op == "cps":
                 return self.fun.compose(conjunto1, conjunto2)
             elif op == "pot":
                 print("a", conjunto1)
@@ -40,7 +40,7 @@ class Conjuntos_Evaluator:
                 return self.fun.bin(conjunto3, conjunto2, conjunto1) #relacion es conjunto 1, conjunto2, conjunto3
 
         def prioridad(op):
-            if op in ["uni", "int", "dif", "pro", "comp", "pot"]:
+            if op in ["uni", "int", "dif", "pro", "cps", "pot"]:
                 return 1
             if op in ["com", "fun", "ref", "sim", "tra", "bin"]:
                 return 2
