@@ -54,6 +54,7 @@ class ConjuntoManager:
             return lst in self.referencial
 
     def agregar_conjunto(self, lista_elementos, nombre, conjuntos):
+            print("lista", lista_elementos)
             if self.validar_elementos(lista_elementos) or nombre == "U":
                 conjuntos[nombre] = lista_elementos
                 return True, lista_elementos

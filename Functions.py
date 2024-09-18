@@ -113,40 +113,41 @@ class FuncionesConjunto:
 
     def compose(self, relacion1, relacion2):
         """
-        Retorna la composición de dos relaciones.
+        Retorna la composición de dos relaciones sin duplicados.
 
         Parámetros:
         relacion1 (list): La primera relación, una lista de pares.
         relacion2 (list): La segunda relación, una lista de pares.
 
         Retorna:
-        list: La composición de las dos relaciones.
+        list: La composición de las dos relaciones sin duplicados.
         """
-        result = []
+        result = set()  # Usamos un conjunto para evitar duplicados
         for a, b in relacion1:
             for c, d in relacion2:
                 if b == c:
-                    result.append((a, d))
-        return result
+                    result.add((a, d))  # Añadimos la tupla (a, d) al conjunto
+        return list(result)  # Convertimos el conjunto a una lista antes de retornarlo
 
     def potencia(self, relacion, n):
         """
-        Calcula la potencia n-ésima de una relación.
+        Calcula la potencia n-ésima de una relación sin duplicados.
 
         Parámetros:
         relacion (list): La relación, una lista de pares.
         n (int): El exponente de la potencia.
 
         Retorna:
-        list: La relación elevada a la potencia n.
+        list: La relación elevada a la potencia n, sin duplicados.
         """
-        n=int(n[0])
+        n = int(n[0])
         if n < 1:
             return []  # No tiene sentido calcular potencia 0 o negativa
-        resultado = relacion.copy()
+        resultado = set(map(tuple, relacion))  # Convertimos la relación en un conjunto de tuplas para evitar duplicados
         for _ in range(n - 1):
-            resultado = self.compose(resultado, relacion)
-        return resultado
+            resultado = set(self.compose(list(resultado), relacion))
+        return list(resultado)  # Convertimos de nuevo el conjunto a lista antes de retornarlo
+
 
     def ref(self, relacion, conjunto):
         """
