@@ -27,6 +27,8 @@ class Conjuntos_Evaluator:
             elif op == "comp":
                 return self.fun.compose(conjunto1, conjunto2)
             elif op == "pot":
+                print("a", conjunto1)
+                print("b", conjunto2)
                 return self.fun.potencia(conjunto1, conjunto2)  #conjunto2 deberia ser el exponente
             elif op == "ref":
                 return self.fun.ref(conjunto1, conjunto2)
@@ -35,9 +37,6 @@ class Conjuntos_Evaluator:
             elif op == "tra":
                 return self.fun.tra(conjunto1, conjunto2)
             elif op == "bin":
-                print("conjunto 1: ", conjunto1)
-                print("conjunto 2: ", conjunto2)
-                print("conjunto 3: ", conjunto3)
                 return self.fun.bin(conjunto3, conjunto2, conjunto1) #relacion es conjunto 1, conjunto2, conjunto3
 
         def prioridad(op):
@@ -65,7 +64,7 @@ class Conjuntos_Evaluator:
                 print("p creado stack operandos ln62", stack_operandos)
             elif token.isnumeric():
                 stack_operandos.append(token)
-            elif token in ["uni", "int", "dif", "com", "fun", "pro", "ref", "sim", "tra", "bin"]:
+            elif token in ["uni", "int", "dif", "com", "fun", "pro", "ref", "sim", "tra", "bin", "pot"]:
                 print("p creado stack operandos ln65", stack_operandos)
 
                 while (stack_operadores and prioridad(stack_operadores[-1]) >= prioridad(token)):
