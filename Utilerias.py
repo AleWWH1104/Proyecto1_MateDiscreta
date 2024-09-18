@@ -61,3 +61,23 @@ class ConjuntoManager:
             else:
                 return False, "Error: Un elemento no pertenece al conjunto referencial."
             
+    def lista_a_string(self, lista, es_exterior=True):
+        # Si estamos en el nivel exterior usamos llaves {}, si no, usamos paréntesis ()
+        if type(lista) == bool:
+            return "True" if lista else "False"
+        if es_exterior:
+            delimitador_izquierdo = '{'
+            delimitador_derecho = '}'
+        else:
+            delimitador_izquierdo = '('
+            delimitador_derecho = ')'
+        
+        elementos = []
+        for elemento in lista:
+            if isinstance(elemento, list):  # Si el elemento es una lista, llamada recursiva
+                elementos.append(self.lista_a_string(elemento, es_exterior=False))  # Interior usa ()
+            else:
+                elementos.append(str(elemento))  # Elementos normales se convierten a string
+
+        return f"{delimitador_izquierdo}{','.join(elementos)}{delimitador_derecho}"
+            

@@ -166,6 +166,7 @@ class App(tk.Tk):
         print(entrada)
         conjunto = self.calculadora_conjuntos.evaluate(entrada, conjuntos)
         print(conjunto)
+        conjunto = self.manager.lista_a_string(conjunto)
         self.text_resultado.delete(1.0, tk.END)
         self.text_resultado.insert(tk.END, conjunto)
         self.entry_cal_con.delete(0, tk.END)
