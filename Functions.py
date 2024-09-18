@@ -12,8 +12,13 @@ class FuncionesConjunto:
     complemento(conjunto): Retorna el complemento de un conjunto respecto al conjunto referencial.
     is_funcion(conjunto_funcion): Verifica si un conjunto es una función (todos los elementos son listas con dominios únicos).
     producto_cartesiano(conjunto1, conjunto2): Retorna el producto cartesiano de dos conjuntos.
+    compose relacion1, relacion2): Retorna la composición de dos relaciones.
+    potencia(relacion, n): Calcula la potencia n-ésima de una relación.
+    ref(relacion, conjunto): Verifica si una relación es reflexiva en un conjunto.
+    sim(relacion, conjunto): Verifica si una relación es simétrica en un conjunto.
+    tra(relacion, conjunto): Verifica si una relación es transitiva en un conjunto.
     """
-    
+
     def __init__(self, conjunto_referencial):
         """
         Inicializa la clase FuncionesConjunto con un conjunto referencial.
@@ -87,7 +92,7 @@ class FuncionesConjunto:
         if not all(isinstance(item, list) and len(item) == 2 for item in conjunto_funcion):
             return False
         dominios = [item[0] for item in conjunto_funcion]
-        return [len(dominios) == len(set(dominios))]
+        return len(dominios) == len(set(dominios))
 
     def producto_cartesiano(self, conjunto1, conjunto2):
         """
@@ -106,3 +111,87 @@ class FuncionesConjunto:
                 conjunto1Xconjunto2.append((i, j))
         return conjunto1Xconjunto2
 
+    def compose(self, relacion1, relacion2):
+        """
+        Retorna la composición de dos relaciones.
+
+        Parámetros:
+        relacion1 (list): La primera relación, una lista de pares.
+        relacion2 (list): La segunda relación, una lista de pares.
+
+        Retorna:
+        list: La composición de las dos relaciones.
+        """
+        result = []
+        for a, b in relacion1:
+            for c, d in relacion2:
+                if b == c:
+                    result.append((a, d))
+        return result
+
+    def potencia(self, relacion, n):
+        """
+        Calcula la potencia n-ésima de una relación.
+
+        Parámetros:
+        relacion (list): La relación, una lista de pares.
+        n (int): El exponente de la potencia.
+
+        Retorna:
+        list: La relación elevada a la potencia n.
+        """
+        if n < 1:
+            return []  # No tiene sentido calcular potencia 0 o negativa
+        resultado = relacion.copy()
+        for _ in range(n - 1):
+            resultado = self.compose(resultado, relacion)
+        return resultado
+
+    def ref(self, relacion, conjunto):
+        """
+        Verifica si una relación es reflexiva en un conjunto.
+
+        Parámetros:
+        relacion (list): La relación, una lista de pares.
+        conjunto (list): El conjunto sobre el cual se define la reflexividad.
+
+        Retorna:
+        bool: True si la relación es reflexiva, False en caso contrario.
+        """
+        for a in conjunto:
+            if [a, a] not in relacion:
+                return False
+        return True
+
+    def sim(self, relacion, conjunto):
+        """
+        Verifica si una relación es simétrica en un conjunto.
+
+        Parámetros:
+        relacion (list): La relación, una lista de pares.
+        conjunto (list): El conjunto sobre el cual se define la simetría.
+
+        Retorna:
+        bool: True si la relación es simétrica, False en caso contrario.
+        """
+        for (a, b) in relacion:
+            if [b, a] not in relacion:
+                return False
+        return True
+
+    def tra(self, relacion, conjunto):
+        """
+        Verifica si una relación es transitiva en un conjunto.
+
+        Parámetros:
+        relacion (list): La relación, una lista de pares.
+        conjunto (list): El conjunto sobre el cual se define la transitividad.
+
+        Retorna:
+        bool: True si la relación es transitiva, False en caso contrario.
+        """
+        for (a, b) in relacion:
+            for (c, d) in relacion:
+                if b == c and [a, d] not in relacion:
+                    return False
+        return True
