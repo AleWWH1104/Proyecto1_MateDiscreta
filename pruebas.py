@@ -33,6 +33,27 @@ def tra(R,A):
                 return False
     return True
 
+
+def bin(R, A, B):
+    rel_dict = {}
+    for a, b in R:
+        if a not in C or b not in B:
+            return False  
+        if a in rel_dict:
+            return False
+        rel_dict[a] = b
+    return len(rel_dict) == len(A)
+
+
+R = [['1', '2'], ['2', '3'], ['3', '1']] 
+C = ['1', '2', '3']  
+B = ['1', '2', '3']  
+
+print("binaria: ", bin(R, C, B))
+
+R2 = [['1', '2'], ['2', '3'], ['2', '1']]  
+print("binaria: ", bin(R2, C, B))  
+
 R1 = [['1', '1'], ['2', '2'], ['3', '3'], ['0', '0'], ['1', '2'],['2', '1']]
 conjunto = ['1', '2', '3', '0']
 
