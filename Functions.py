@@ -140,6 +140,7 @@ class FuncionesConjunto:
         Retorna:
         list: La relación elevada a la potencia n.
         """
+        n=n[0]
         if n < 1:
             return []  # No tiene sentido calcular potencia 0 o negativa
         resultado = relacion.copy()
