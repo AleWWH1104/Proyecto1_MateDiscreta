@@ -33,6 +33,33 @@ def tra(R,A):
                 return False
     return True
 
+
+def bin(R, A, B):
+    # Diccionario para rastrear cuántas veces cada elemento de A está relacionado con B
+    rel_dict = {}
+
+    for a, b in R:
+        if a not in C or b not in B:
+            return False  # El elemento de la relación no está en A o B
+        if a in rel_dict:
+            return False  # Un elemento de A está relacionado con más de un elemento de B
+        rel_dict[a] = b
+
+    # Verificar que todos los elementos de A estén relacionados con algún elemento de B
+    return len(rel_dict) == len(A)
+
+
+# Ejemplo de prueba para la función bin
+R = [['1', '2'], ['2', '3'], ['3', '1']]  # Relación
+C = ['1', '2', '3']  # Dominio
+B = ['1', '2', '3']  # Codominio
+
+print("binaria: ", bin(R, C, B))  # Debería retornar True
+
+# Otro ejemplo donde no es binaria
+R2 = [['1', '2'], ['2', '3'], ['2', '1']]  # 2 está relacionado con 2 elementos en B
+print("binaria: ", bin(R2, C, B))  # Debería retornar False
+
 R1 = [['1', '1'], ['2', '2'], ['3', '3'], ['0', '0'], ['1', '2'],['2', '1']]
 conjunto = ['1', '2', '3', '0']
 

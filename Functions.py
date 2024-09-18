@@ -195,3 +195,24 @@ class FuncionesConjunto:
                 if b == c and [a, d] not in relacion:
                     return False
         return True
+    
+    def bin(self, relacion, conjunto1, conjunto2):
+        """
+        Verifica si la relación relacion es una función binaria de conjunto1 a conjunto2.
+        
+        Parámetros:
+        relacion (list): La relación, una lista de pares.
+        conjunto1 (list): El dominio (conjunto de partida).
+        conjunto2 (list): El codominio (conjunto de llegada).
+
+        Retorna:
+        bool: True si la relación es binaria de conjunto1 a conjunto2, False en caso contrario.
+        """
+        rel_dict = {}
+        for a, b in relacion:
+            if a not in conjunto1 or b not in conjunto2:
+                return False  # El elemento de la relación no está en conjunto1 o conjunto2
+            if a in rel_dict:
+                return False  # Un elemento de conjunto1 está relacionado con más de un elemento de conjunto2
+            rel_dict[a] = b
+        return len(rel_dict) == len(conjunto1)
