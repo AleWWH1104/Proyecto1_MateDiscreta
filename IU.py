@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import ModularArithmetic
 
 class CalculadoraGrafica:
     def __init__(self, master):
@@ -47,7 +48,9 @@ class CalculadoraGrafica:
     def click(self, key):
         if key.strip() == '=':
             try:
+                calc = ModularArithmetic()
                 expression = self.pantalla.get()
+
                 resultado = "".join(None)
                 self.pantalla.delete(0, tk.END)
                 self.pantalla.insert(tk.END, str(resultado))
