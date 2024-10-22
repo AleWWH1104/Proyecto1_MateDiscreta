@@ -12,22 +12,13 @@ class CalculadoraGrafica:
         self.pantalla = ttk.Entry(master, width=30, justify="right", font=("Arial", 18))
         self.pantalla.grid(row=0, column=0, columnspan=4, padx=15, pady=(20, 10), ipady=15)
 
-        # Estilo de los botones
-        style = ttk.Style()
-        style.theme_use('clam') 
-        
-        # Definir colores para cada tipo de botón
-        style.configure("CBtn", background="#335B78", foreground="white", font=("Arial", 14), padding=10)
-        style.configure("NumBtn", background="#768592", foreground="white", font=("Arial", 14), padding=10)
-        style.configure("OpBtn", background="#62696F", foreground="white", font=("Arial", 14), padding=10)
-        
-        # Lista de botones y sus estilos correspondientes
+        # Crear los botones
         botones = [
             ('C', "CBtn"), ('(', "OpBtn"), (')', "OpBtn"), ('^', "OpBtn"),
-            ('7', "NumBtn"), ('8', "NumBtn"), ('9', "NumBtn"), ('/', "OpBtn"),
-            ('4', "NumBtn"), ('5', "NumBtn"), ('6', "NumBtn"), ('*', "OpBtn"),
-            ('1', "NumBtn"), ('2', "NumBtn"), ('3', "NumBtn"), ('-', "OpBtn"),
-            ('0', "NumBtn"), ('=', "CBtn"), ('mod', "OpBtn"), ('+', "OpBtn")
+            ('7', "NumBtn"), ('8', "NumBtn"), ('9', "NumBtn"), (' / ', "OpBtn"),
+            ('4', "NumBtn"), ('5', "NumBtn"), ('6', "NumBtn"), (' * ', "OpBtn"),
+            ('1', "NumBtn"), ('2', "NumBtn"), ('3', "NumBtn"), (' - ', "OpBtn"),
+            ('0', "NumBtn"), (' = ', "CBtn"), (' mod ', "OpBtn"), (' + ', "OpBtn")
         ]
 
         # Crear los botones
@@ -35,8 +26,14 @@ class CalculadoraGrafica:
         col = 0
         for (boton, estilo) in botones:
             comando = lambda x=boton: self.click(x)
-            btn = ttk.Button(master, text=boton, command=comando, style=estilo)
+            btn = tk.Button(master, text=boton, command=comando, bg="#768592", fg="white", font=("Arial", 14))
             
+            # Personalizar color según el tipo de botón
+            if estilo == "CBtn":
+                btn.config(bg="#335B78")
+            elif estilo == "OpBtn":
+                btn.config(bg="#62696F")
+
             # Posicionar el botón en la cuadrícula
             btn.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
             master.grid_rowconfigure(row, weight=1)
@@ -48,7 +45,7 @@ class CalculadoraGrafica:
                 row += 1
 
     def click(self, key):
-        if key == '=':
+        if key.strip() == '=':
             try:
                 resultado = eval(self.pantalla.get())
                 self.pantalla.delete(0, tk.END)
@@ -56,7 +53,7 @@ class CalculadoraGrafica:
             except:
                 self.pantalla.delete(0, tk.END)
                 self.pantalla.insert(tk.END, "Error")
-        elif key == 'C':
+        elif key.strip() == 'C':
             self.pantalla.delete(0, tk.END)
         else:
             self.pantalla.insert(tk.END, key)
