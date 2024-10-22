@@ -15,10 +15,10 @@ class CalculadoraGrafica:
         # Crear los botones
         botones = [
             ('C', "CBtn"), ('(', "OpBtn"), (')', "OpBtn"), ('^', "OpBtn"),
-            ('7', "NumBtn"), ('8', "NumBtn"), ('9', "NumBtn"), (' / ', "OpBtn"),
-            ('4', "NumBtn"), ('5', "NumBtn"), ('6', "NumBtn"), (' * ', "OpBtn"),
-            ('1', "NumBtn"), ('2', "NumBtn"), ('3', "NumBtn"), (' - ', "OpBtn"),
-            ('0', "NumBtn"), (' = ', "CBtn"), (' mod ', "OpBtn"), (' + ', "OpBtn")
+            ('7', "NumBtn"), ('8', "NumBtn"), ('9', "NumBtn"), ('/', "OpBtn"),
+            ('4', "NumBtn"), ('5', "NumBtn"), ('6', "NumBtn"), ('*', "OpBtn"),
+            ('1', "NumBtn"), ('2', "NumBtn"), ('3', "NumBtn"), ('-', "OpBtn"),
+            ('0', "NumBtn"), ('=', "CBtn"), ('mod', "OpBtn"), ('+', "OpBtn")
         ]
 
         # Crear los botones
@@ -47,7 +47,8 @@ class CalculadoraGrafica:
     def click(self, key):
         if key.strip() == '=':
             try:
-                resultado = eval(self.pantalla.get())
+                expression = self.pantalla.get()
+                resultado = "".join(None)
                 self.pantalla.delete(0, tk.END)
                 self.pantalla.insert(tk.END, str(resultado))
             except:
