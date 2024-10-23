@@ -12,9 +12,7 @@ class ModularArithmetic:
         return (a * b)
 
     def mod_divide(self, a, b):
-        # Asumimos que b tiene inverso multiplicativo en Zp
-        b_inv = pow(b, -1, self.p)
-        return (a * b_inv)
+        return (a / b)
 
     def mod_power(self, a, b):
         return pow(a, b, self.p)

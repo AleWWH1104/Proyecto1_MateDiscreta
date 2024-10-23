@@ -1,4 +1,5 @@
 from ModularArithmetic import ModularArithmetic
+import Utilerias
 
 class ModularEvaluator:
     def __init__(self):
@@ -34,7 +35,6 @@ class ModularEvaluator:
         tokens = expresion.replace("(", " ( ").replace(")", " ) ").replace("^", " ^ ").replace("*", " * ").replace("/", " / ").replace("+", " + ").replace("-", " - ").replace("mod", " mod ").split()
         print("ln35", tokens)
 
-
         # Buscar el mod
         if "mod" in tokens:
             mod_index = tokens.index("mod")
@@ -46,6 +46,8 @@ class ModularEvaluator:
             print("ln46", tokens)
             tokens.pop()
             print("ln48", tokens)
+            print(mod_index)
+            if not(Utilerias.es_primo(new_mod)): raise Exception("No es primo")
 
         # Stacks
         stack_operadores = []
