@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-import ModularArithmetic
+from Evaluador import ModularEvaluator
 
 class CalculadoraGrafica:
     def __init__(self, master):
@@ -8,6 +8,8 @@ class CalculadoraGrafica:
         master.title("Calculadora Gráfica")
         master.geometry("350x500")
         master.config(bg="#ACB6BE")
+
+        self.evaluador = ModularEvaluator()
 
         # Pantalla de la calculadora
         self.pantalla = ttk.Entry(master, width=30, justify="right", font=("Arial", 18))
@@ -48,19 +50,19 @@ class CalculadoraGrafica:
     def click(self, key):
         if key.strip() == '=':
             try:
-                calc = ModularArithmetic()
-                expression = self.pantalla.get()
-
-                resultado = "".join(None)
+                expression = self.pantalla.get()  # Obtener la expresión de la pantalla
+                resultado = self.evaluador.evaluate(expression)  # Evaluar la expresión usando el evaluador
                 self.pantalla.delete(0, tk.END)
-                self.pantalla.insert(tk.END, str(resultado))
-            except:
+                self.pantalla.insert(tk.END, str(resultado))  # Mostrar el resultado en la pantalla
+            except Exception as e:
                 self.pantalla.delete(0, tk.END)
                 self.pantalla.insert(tk.END, "Error")
+                print("Error en la evaluación:", e)  # Opcional: para debug en consola
         elif key.strip() == 'C':
             self.pantalla.delete(0, tk.END)
         else:
             self.pantalla.insert(tk.END, key)
+
 
 # Crear la ventana principal
 root = tk.Tk()

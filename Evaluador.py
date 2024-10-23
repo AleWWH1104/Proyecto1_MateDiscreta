@@ -93,6 +93,6 @@ class ModularEvaluator:
 
 #pruebas
 evaluador = ModularEvaluator()
-expresion = "((6^2 * 3 + 7) / (2^3 - 5)) * (11 + 4^3) - 9 (mod 41)"
+expresion = "(7^3 + 4 * 5) * 2 (mod 23)"
 resultado = evaluador.evaluate(expresion)
 print(resultado)
