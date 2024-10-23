@@ -12,7 +12,7 @@ class ModularArithmetic:
         return (a * b)
 
     def mod_divide(self, a, b): #división
-        return (a / b)
+        return (a * pow(b,-1,self.p))
 
     def mod_power(self, a, b): #potencia
         return pow(a, b, self.p)
