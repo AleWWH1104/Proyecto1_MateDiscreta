@@ -1,24 +1,27 @@
-from ModularArithmetic import ModularArithmetic
-import Utilerias
+from ModularArithmetic import ModularArithmetic  # Importa la clase para realizar operaciones modulares
+import Utilerias  # Importa utilidades adicionales (como verificar si un número es primo)
 
 class ModularEvaluator:
     def __init__(self):
-        self.mod_arithmetic = ModularArithmetic()
+        self.mod_arithmetic = ModularArithmetic()  # Instancia de aritmética modular
 
+    # Función para evaluar expresiones
     def evaluate(self, expresion):
 
+        # Función interna para aplicar operaciones
         def aplicar_operacion(op, a, b=None):
             if op == "+":
-                return self.mod_arithmetic.mod_add(a, b)
+                return self.mod_arithmetic.mod_add(a, b)  # Suma modular
             elif op == "-":
-                return self.mod_arithmetic.mod_subtract(a, b)
+                return self.mod_arithmetic.mod_subtract(a, b)  # Resta modular
             elif op == "*":
-                return self.mod_arithmetic.mod_multiply(a, b)
+                return self.mod_arithmetic.mod_multiply(a, b)  # Multiplicación modular
             elif op == "/":
-                return self.mod_arithmetic.mod_divide(a, b)
+                return self.mod_arithmetic.mod_divide(a, b)  # División modular
             elif op == "^":
-                return self.mod_arithmetic.mod_power(a, b)
+                return self.mod_arithmetic.mod_power(a, b)  # Potencia modular
         
+        # Define la prioridad de los operadores
         def prioridad(op):
             if op in ["+", "-"]:
                 return 1
@@ -28,37 +31,31 @@ class ModularEvaluator:
                 return 3
             return -1
         
+        # Realiza la operación utilizando el operador y los operandos
         def operar(operador, a, b=None):
             return aplicar_operacion(operador, a, b)
 
-        # Tokenizar la expresión
+        # Tokeniza la expresión para separarla en números y operadores
         tokens = expresion.replace("(", " ( ").replace(")", " ) ").replace("^", " ^ ").replace("*", " * ").replace("/", " / ").replace("+", " + ").replace("-", " - ").replace("mod", " mod ").split()
-        print("ln35", tokens)
+        print("ln35", tokens)  # Debug para verificar los tokens
 
-        # Buscar el mod
+        # Buscar y aplicar el operador 'mod'
         if "mod" in tokens:
             mod_index = tokens.index("mod")
-            print("ln41", mod_index)
             new_mod = int(tokens[mod_index + 1])
-            print("ln43", new_mod)
-            self.mod_arithmetic.set_modulo(new_mod)
-            tokens = tokens[:mod_index]  # Remover la parte "mod n"
-            print("ln46", tokens)
+            self.mod_arithmetic.set_modulo(new_mod)  # Configurar el nuevo módulo
+            tokens = tokens[:mod_index]  # Elimina la parte "mod n"
             tokens.pop()
-            print("ln48", tokens)
-            print(mod_index)
-            if not(Utilerias.es_primo(new_mod)): raise Exception("No es primo")
+            if not(Utilerias.es_primo(new_mod)): raise Exception("No es primo")  # Validación del número primo
 
-        # Stacks
+        # Pilas para operadores y operandos
         stack_operadores = []
         stack_operandos = []
 
-        # Evaluacion de la expresion
+        # Evaluación de la expresión
         for token in tokens:
             if token.isnumeric():
-                stack_operandos.append(int(token))
-                print("ln56", stack_operandos)
-                print("ln57", stack_operadores)
+                stack_operandos.append(int(token))  # Agregar números al stack de operandos
             elif token in ["+", "-", "*", "/", "^"]:
                 while (stack_operadores and prioridad(stack_operadores[-1]) >= prioridad(token)):
                     operador = stack_operadores.pop()
@@ -76,7 +73,7 @@ class ModularEvaluator:
                     a = stack_operandos.pop()
                     resultado = operar(operador, a, b)
                     stack_operandos.append(resultado)
-                stack_operadores.pop()  # Remover el '('
+                stack_operadores.pop()  # Eliminar el '('
 
         # Aplicar cualquier operador restante
         while stack_operadores:
@@ -86,15 +83,13 @@ class ModularEvaluator:
             resultado = operar(operador, a, b)
             stack_operandos.append(resultado)
         
-
-        r = self.mod_arithmetic.mod_evaluate(stack_operandos[0],new_mod)
-        print(r)
-
+        # Realiza la operación final modular
+        r = self.mod_arithmetic.mod_evaluate(stack_operandos[0], new_mod)
         return r
 
 
-#pruebas
+"""# Prueba de la evaluación
 evaluador = ModularEvaluator()
 expresion = "(7^3 + 4 * 5) * 2 (mod 23)"
 resultado = evaluador.evaluate(expresion)
-print(resultado)
+print(resultado)  # Imprime el resultado de la evaluación"""
