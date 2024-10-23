@@ -5,5 +5,3 @@ def es_primo(n):
         if n % i == 0:
             return False
     return True
-
-# Ejemplo de uso
