@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from evaluador import evaluar  # Importa la función evaluar
 
 class UI:
     def __init__(self, root):
@@ -51,19 +52,41 @@ class UI:
         self.entry_r.pack(side="left")
 
         # Botón para ingresar
-        btn_ingresar = tk.Button(main_frame, text="Ingresar", bg="#0E2A47", fg="white")
+        btn_ingresar = tk.Button(main_frame, text="Ingresar", bg="#0E2A47", fg="white", command=self.calcular)
         btn_ingresar.grid(row=5, column=0, columnspan=2, pady=10)
 
         # Frame para el resultado
         resultado_frame = tk.Frame(root, bg="#6C95B3", padx=20)
         resultado_frame.grid(row=1, column=0, padx=20, pady=20)
 
-        lbl_resultado = tk.Label(resultado_frame, text="Resultado:", bg="#6C95B3",font=("Arial", 12, "bold"))
+        lbl_resultado = tk.Label(resultado_frame, text="Resultado:", bg="#6C95B3", font=("Arial", 12, "bold"))
         lbl_resultado.grid(row=0, column=0, sticky="w")
 
         self.lbl_mostrar_resultado = tk.Label(resultado_frame, text="", bg="#6C95B3", width=40, anchor="w")
         self.lbl_mostrar_resultado.grid(row=1, column=0, pady=5)
 
+    def calcular(self):
+        # Obtener los valores de entrada
+        objetos = self.entry_objetos.get().split(",")
+        orden = self.orden_var.get()
+        repetir = self.repetir_var.get()
+        
+        # Obtener los valores de (n) y (r), y validar si son enteros
+        try:
+            n = int(self.entry_n.get())
+        except ValueError:
+            n = None  # Asigna None si no se proporciona (n)
+        
+        try:
+            r = int(self.entry_r.get())
+        except ValueError:
+            r = None  # Asigna None si no se proporciona (r)
+        
+        # Llamar a la función evaluar y mostrar el resultado
+        resultado = evaluar(objetos, repetir, orden, r)
+        
+        # Mostrar el resultado en el label
+        self.lbl_mostrar_resultado.config(text=str(resultado))
 
 if __name__ == "__main__":
     root = tk.Tk()

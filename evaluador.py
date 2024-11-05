@@ -1,7 +1,7 @@
 from itertools import permutations, combinations, product, combinations_with_replacement
 
-def evaluar(lista, muestreo, orden, r=None):
-    if r is None:
+def evaluar(lista, muestreo, orden, r=""):
+    if r == "":
         r = len(lista)
 
     # Determinar si es permutación o combinación basándonos en muestreo y orden
