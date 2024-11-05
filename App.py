@@ -62,8 +62,14 @@ class UI:
         lbl_resultado = tk.Label(resultado_frame, text="Resultado:", bg="#6C95B3", font=("Arial", 12, "bold"))
         lbl_resultado.grid(row=0, column=0, sticky="w")
 
-        self.lbl_mostrar_resultado = tk.Label(resultado_frame, text="", bg="#6C95B3", width=40, anchor="w")
-        self.lbl_mostrar_resultado.grid(row=1, column=0, pady=5)
+        # Crear widget Text para el resultado con Scrollbar
+        self.text_resultado = tk.Text(resultado_frame, width=60, height=10, wrap="word", bg="#E1EAF2", fg="black")
+        self.text_resultado.grid(row=1, column=0, pady=5)
+
+        # Agregar Scrollbar al widget Text
+        scrollbar = tk.Scrollbar(resultado_frame, command=self.text_resultado.yview)
+        scrollbar.grid(row=1, column=1, sticky="ns")
+        self.text_resultado['yscrollcommand'] = scrollbar.set
 
     def calcular(self):
         # Obtener los valores de entrada
@@ -85,8 +91,11 @@ class UI:
         # Llamar a la función evaluar y mostrar el resultado
         resultado = evaluar(objetos, repetir, orden, r)
         
-        # Mostrar el resultado en el label
-        self.lbl_mostrar_resultado.config(text=str(resultado))
+        # Limpiar el contenido anterior en el Text widget
+        self.text_resultado.delete(1.0, tk.END)
+
+        # Insertar el nuevo resultado
+        self.text_resultado.insert(tk.END, str(resultado))
 
 if __name__ == "__main__":
     root = tk.Tk()
