@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from evaluador import CombinatoriaAvanzada  # Importar la clase CombinatoriaAvanzada
-
+from combinatoria import Combinatoria # Importar Combinatoria
 class UI:
     def __init__(self, root):
         root.title("Proyecto 4 MD")
@@ -62,8 +62,8 @@ class UI:
         lbl_resultado = tk.Label(resultado_frame, text="Resultado:", bg="#6C95B3", font=("Arial", 12, "bold"))
         lbl_resultado.grid(row=0, column=0, sticky="w")
 
-        # Crear widget Text para el resultado con Scrollbar
-        self.text_resultado = tk.Text(resultado_frame, width=60, height=10, wrap="word", bg="#E1EAF2", fg="black")
+        # Crear widget Text para el resultado con Scrollbar (ampliado en tamaño)
+        self.text_resultado = tk.Text(resultado_frame, width=70, height=12, wrap="word", bg="#E1EAF2", fg="black")
         self.text_resultado.grid(row=1, column=0, pady=5)
 
         # Agregar Scrollbar al widget Text
@@ -88,14 +88,18 @@ class UI:
         except ValueError:
             r = None  # Asigna None si no se proporciona (r)
         
-        # Llamar a la función evaluar y mostrar el resultado
-        resultado = CombinatoriaAvanzada.evaluar(objetos, rep=repetir, orden=orden, r=r)
+        # Calcular el resultado usando evaluador.py
+        posible, resultado = CombinatoriaAvanzada.evaluar(objetos, rep=repetir, orden=orden, r=r)
         
+        # Calcular la cantidad usando calc.py
+        cantidad = Combinatoria.calcular_cantidad(objetos, rep=repetir, orden=orden, r=r)
+
         # Limpiar el contenido anterior en el Text widget
         self.text_resultado.delete(1.0, tk.END)
 
-        # Insertar el nuevo resultado
-        self.text_resultado.insert(tk.END, str(resultado))
+        # Formatear el resultado e insertarlo
+        output = f"cantidad: {cantidad}\nposible: {posible}\nresultado: {resultado}"
+        self.text_resultado.insert(tk.END, output)
 
 if __name__ == "__main__":
     root = tk.Tk()
