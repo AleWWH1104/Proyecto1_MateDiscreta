@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from CombinatoriaAvanzada import CombinatoriaAvanzada 
-from combinatoria import Combinatoria
+from Combinatoria import Combinatoria
 
 class UI:
     def __init__(self, root):
