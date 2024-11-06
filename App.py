@@ -1,11 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
-from evaluador import CombinatoriaAvanzada  # Importar la clase CombinatoriaAvanzada
-from combinatoria import Combinatoria # Importar Combinatoria
+from evaluador import CombinatoriaAvanzada 
+from combinatoria import Combinatoria  # Importar la clase CombinatoriaAvanzada
+
 class UI:
     def __init__(self, root):
         root.title("Proyecto 4 MD")
         root.configure(bg="#0E2A47")
+        self.isN = False
 
         # Crear frame principal
         main_frame = tk.Frame(root, bg="#6C95B3", padx=20, pady=20)
@@ -33,27 +35,32 @@ class UI:
         chk_repetir = tk.Checkbutton(main_frame, text="¿Vale repetir?", variable=self.repetir_var, bg="#6C95B3")
         chk_repetir.grid(row=3, column=1, sticky="w")
 
+        # Opción para alternar entre lista y valor de N
+        self.use_n_var = tk.BooleanVar(value=False)  # Variable para el botón de alternancia
+        toggle_button = tk.Checkbutton(main_frame, text="Usar valor de N en lugar de la lista", variable=self.use_n_var, bg="#6C95B3", command=self.toggle_input_mode)
+        toggle_button.grid(row=4, column=0, columnspan=2, pady=10)
+
         # Frame interno para las entradas (n) y (r)
         nr_frame = tk.Frame(main_frame, bg="#6C95B3")
-        nr_frame.grid(row=4, column=0, columnspan=2, pady=10)
+        nr_frame.grid(row=5, column=0, columnspan=2, pady=10)
 
         # Etiqueta y campo de entrada para (n)
         lbl_n = tk.Label(nr_frame, text="(n):", bg="#6C95B3")
         lbl_n.pack(side="left")
 
-        self.entry_n = tk.Entry(nr_frame, width=10)
+        self.entry_n = tk.Entry(nr_frame, width=10, state="disabled")
         self.entry_n.pack(side="left", padx=5)
 
         # Etiqueta y campo de entrada para (r)
         lbl_r = tk.Label(nr_frame, text="(r):", bg="#6C95B3")
-        lbl_r.pack(side="left", padx=(20, 5))  # Espacio entre (n) y (r)
+        lbl_r.pack(side="left", padx=(20, 5))
 
         self.entry_r = tk.Entry(nr_frame, width=10)
         self.entry_r.pack(side="left")
 
         # Botón para ingresar
         btn_ingresar = tk.Button(main_frame, text="Ingresar", bg="#0E2A47", fg="white", command=self.calcular)
-        btn_ingresar.grid(row=5, column=0, columnspan=2, pady=10)
+        btn_ingresar.grid(row=6, column=0, columnspan=2, pady=10)
 
         # Frame para el resultado
         resultado_frame = tk.Frame(root, bg="#6C95B3", padx=20)
@@ -62,8 +69,8 @@ class UI:
         lbl_resultado = tk.Label(resultado_frame, text="Resultado:", bg="#6C95B3", font=("Arial", 12, "bold"))
         lbl_resultado.grid(row=0, column=0, sticky="w")
 
-        # Crear widget Text para el resultado con Scrollbar (ampliado en tamaño)
-        self.text_resultado = tk.Text(resultado_frame, width=70, height=12, wrap="word", bg="#E1EAF2", fg="black")
+        # Crear widget Text para el resultado con Scrollbar
+        self.text_resultado = tk.Text(resultado_frame, width=60, height=10, wrap="word", bg="#E1EAF2", fg="black")
         self.text_resultado.grid(row=1, column=0, pady=5)
 
         # Agregar Scrollbar al widget Text
@@ -71,35 +78,53 @@ class UI:
         scrollbar.grid(row=1, column=1, sticky="ns")
         self.text_resultado['yscrollcommand'] = scrollbar.set
 
+    def toggle_input_mode(self):
+        # Habilitar/deshabilitar entrada de lista y campo de (n) basado en el estado de self.use_n_var
+        if self.use_n_var.get():
+            self.entry_objetos.config(state="disabled")  # Deshabilitar entrada de lista
+            self.entry_n.config(state="normal")  # Deshabilitar entrada de lista
+            self.isN = True
+        else:
+            self.isN = False
+            self.entry_objetos.config(state="normal")  # Habilitar entrada de lista
+            self.entry_n.config(state="disabled")  # Deshabilitar entrada de lista
+
     def calcular(self):
-        # Obtener los valores de entrada
-        objetos = self.entry_objetos.get().split(",")
+        # Obtener valores de entrada
         orden = self.orden_var.get()
         repetir = self.repetir_var.get()
-        
-        # Obtener los valores de (n) y (r), y validar si son enteros
-        try:
-            n = int(self.entry_n.get())
-        except ValueError:
-            n = None  # Asigna None si no se proporciona (n)
-        
-        try:
-            r = int(self.entry_r.get())
-        except ValueError:
-            r = None  # Asigna None si no se proporciona (r)
-        
-        # Calcular el resultado usando evaluador.py
-        posible, resultado = CombinatoriaAvanzada.evaluar(objetos, rep=repetir, orden=orden, r=r)
-        
-        # Calcular la cantidad usando calc.py
-        cantidad = Combinatoria.calcular_cantidad(objetos, rep=repetir, orden=orden, r=r)
 
-        # Limpiar el contenido anterior en el Text widget
+        # Verificar si se usa la lista o el valor de (n)
+        if self.isN:  # Usar valor de (n) y no la lista
+            try:
+                n = int(self.entry_n.get())
+            except ValueError:
+                n = None  # Asignar None si (n) no es válido
+            try:
+                r = int(self.entry_r.get())
+            except ValueError:
+                r = None  # Asignar None si (r) no es válido
+
+            # Llamar a la función con solo (n) y (r)
+            if n is not None and r is not None:
+                cantidad = Combinatoria.calcular_cantidad(n, rep=repetir, orden=orden, r=r)
+                resultado = f"Cantidad calculada con valor de n: {cantidad}"
+            else:
+                resultado = "Por favor, ingrese valores válidos para (n) y (r)."
+        else:  # Usar la lista de objetos
+            objetos = self.entry_objetos.get().split(",")
+            try:
+                r = int(self.entry_r.get())
+            except ValueError:
+                r = None  # Asignar None si (r) no es válido
+
+            # Llamar a la función para calcular usando la lista
+            posible, combinaciones = CombinatoriaAvanzada.evaluar(objetos, rep=repetir, orden=orden, r=r)
+            resultado = f"Número de combinaciones/permutaciones: {posible}\nPosibilidades:\n{combinaciones}"
+
+        # Limpiar el contenido anterior en el Text widget y mostrar el nuevo resultado
         self.text_resultado.delete(1.0, tk.END)
-
-        # Formatear el resultado e insertarlo
-        output = f"cantidad: {cantidad}\nposible: {posible}\nresultado: {resultado}"
-        self.text_resultado.insert(tk.END, output)
+        self.text_resultado.insert(tk.END, resultado)
 
 if __name__ == "__main__":
     root = tk.Tk()

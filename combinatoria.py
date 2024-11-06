@@ -2,7 +2,7 @@ from math import factorial
 
 class Combinatoria:
     @staticmethod
-    def calcular_cantidad(lista, rep, orden, r=None):
+    def calcular_cantidad(n, rep, orden, r=None):
         """
         Calcula la cantidad de combinaciones o permutaciones según las fórmulas específicas.
         
@@ -15,7 +15,6 @@ class Combinatoria:
         Returns:
             int: Cantidad de combinaciones o permutaciones calculadas.
         """
-        n = len(lista)
         if r is None:
             r = n
 
@@ -33,7 +32,7 @@ class Combinatoria:
         return cantidad
 
 # Ejemplos de uso
-elementos = ["a", "b", "c", "d"]
+elementos = 4
 r = 4
 
 # Ejemplo 1: Combinación sin repetición, sin importar el orden
