@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from evaluador import evaluar  # Importa la función evaluar
+from evaluador import CombinatoriaAvanzada  # Importar la clase CombinatoriaAvanzada
 
 class UI:
     def __init__(self, root):
@@ -89,7 +89,7 @@ class UI:
             r = None  # Asigna None si no se proporciona (r)
         
         # Llamar a la función evaluar y mostrar el resultado
-        resultado = evaluar(objetos, repetir, orden, r)
+        resultado = CombinatoriaAvanzada.evaluar(objetos, rep=repetir, orden=orden, r=r)
         
         # Limpiar el contenido anterior en el Text widget
         self.text_resultado.delete(1.0, tk.END)
